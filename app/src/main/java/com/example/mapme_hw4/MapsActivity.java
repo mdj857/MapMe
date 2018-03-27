@@ -5,11 +5,13 @@ import android.location.Geocoder;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.BufferedReader;
@@ -53,43 +55,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-
+        // get lat and long from google API
         String reqURL = "http://maps.google.com/maps/api/geocode/json?address=" + address + "&sensor=false";
-        String response = getLatLongByURL(reqURL);
-
-
-    }
-
-
-    public String getLatLongByURL(String requestURL) {
-        URL url;
-        String response = "";
+        Double[] result = null;
+        MyAsyncTask task = new MyAsyncTask();
+        task.execute(reqURL);
         try {
-            url = new URL(requestURL);
-
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000);
-            conn.setConnectTimeout(15000);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.setRequestProperty("Content-Type",
-                    "application/x-www-form-urlencoded");
-            conn.setDoOutput(true);
-            int responseCode = conn.getResponseCode();
-
-            if (responseCode == HttpsURLConnection.HTTP_OK) {
-                String line;
-                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                while ((line = br.readLine()) != null) {
-                    response += line;
-                }
-            } else {
-                response = "";
-            }
-
+            result = task.get();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return response;
+
+        // display marker
+        LatLng latLng = new LatLng(result[0], result[1]);
+        MarkerOptions marker = new MarkerOptions().position(latLng);
+        CameraUpdate camera = CameraUpdateFactory.newLatLngZoom(latLng, 10);
+        mMap.addMarker(marker);
+        mMap.animateCamera(camera);
+
+
     }
 }

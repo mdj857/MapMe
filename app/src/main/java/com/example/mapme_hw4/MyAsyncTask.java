@@ -18,17 +18,24 @@ import javax.net.ssl.HttpsURLConnection;
  * Created by mattjohnson on 3/27/18.
  */
 
-public class MyAsyncTask extends AsyncTask<String, Void, String[]> {
+public class MyAsyncTask extends AsyncTask<String, Void, Double[]> {
 
     @Override
-    protected String[] doInBackground(String... strings) {
-        return new String[0];
-    }
+    protected Double[] doInBackground(String... strings) {
+        Double[] lat_lng = new Double[2];
 
-    @Override
-    protected void onPostExecute(String... result) {
+        String resp_JSON = new String();
         try {
-            JSONObject jsonObject = new JSONObject(result[0]);
+            String request = strings[0];
+            resp_JSON = getLatLongByURL(request);
+        } catch (Exception e){
+            System.out.print(e.getStackTrace());
+            return null;
+        }
+
+
+        try {
+            JSONObject jsonObject = new JSONObject(resp_JSON);
 
             double lng = ((JSONArray)jsonObject.get("results")).getJSONObject(0)
                     .getJSONObject("geometry").getJSONObject("location")
@@ -38,11 +45,15 @@ public class MyAsyncTask extends AsyncTask<String, Void, String[]> {
                     .getJSONObject("geometry").getJSONObject("location")
                     .getDouble("lat");
 
+            lat_lng[0] = lat;
+            lat_lng[1] = lng;
 
         } catch (JSONException e) {
             e.printStackTrace();
+            return null;
         }
-}
+        return lat_lng;
+    }
 
     public String getLatLongByURL(String requestURL) {
         URL url;
