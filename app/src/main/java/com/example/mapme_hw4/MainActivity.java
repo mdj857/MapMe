@@ -1,12 +1,18 @@
 package com.example.mapme_hw4;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,10 +32,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //address_edit_text.setText("YOLO");
                 String address = address_edit_text.getText().toString();
+                Intent myIntent = new Intent(MainActivity.this, MapsActivity.class);
+                myIntent.putExtra("address", address);
+                MainActivity.this.startActivity(myIntent);
 
-                // actual--see https://stackoverflow.com/questions/3574644/how-can-i-find-the-latitude-and-longitude-from-address
-                Intent searchAddress = new  Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q="+address));
-                startActivity(searchAddress);
+
             }
         });
 

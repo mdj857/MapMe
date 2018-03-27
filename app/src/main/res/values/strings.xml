@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MapMe_HW4</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
