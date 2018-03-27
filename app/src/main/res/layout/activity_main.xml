@@ -6,13 +6,22 @@
     android:layout_height="match_parent"
     tools:context="com.example.mapme_hw4.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/address_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Address"/>
+
+        <Button
+            android:id="@+id/submit_address_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Show me a map!"/>
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
