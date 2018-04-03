@@ -1,9 +1,12 @@
 package com.example.mapme_hw4;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Geocoder;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.widget.EditText;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,7 +30,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private String address;
-    private float[] currentLatLng;
+    private static float[] currentLatLng;
+    private static Double[] addressLatitudeLongitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +89,53 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(marker);
         mMap.animateCamera(camera);
 
+        addressLatitudeLongitude = result;
 
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        final EditText et = new EditText(this);
+        et.setText("You are " + Math.round(getDistanceFromCurrent()) + "miles from that address!");
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(et);
+
+        // set dialog message
+        alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        // show it
+        alertDialog.show();
+
+    }
+
+
+    /* Gets distance from current location to address*/
+    private static double getDistanceFromCurrent() {
+        double lat1 = (double) currentLatLng[0];
+        double lon1 = (double) currentLatLng[1];
+        double lat2 = addressLatitudeLongitude[0];
+        double lon2 = addressLatitudeLongitude[1];
+
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+
+        return dist;
+    }
+
+
+    private static double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+
+    private static double rad2deg(double rad) {
+        return (rad * 180 / Math.PI);
     }
 }

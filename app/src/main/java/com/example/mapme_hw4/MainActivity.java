@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         submit_address_btn = (Button) findViewById(R.id.submit_address_btn);
         current_location_txtview = (TextView) findViewById(R.id.cur_loc);
 
+
         submit_address_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,5 +75,4 @@ public class MainActivity extends AppCompatActivity {
             address_edit_text.setText("security exception!");
         }
     }
-
 }
