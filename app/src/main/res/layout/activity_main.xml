@@ -7,22 +7,22 @@
     android:orientation="vertical"
     tools:context="com.example.mapme_hw4.MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-        <EditText
-            android:id="@+id/address_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Address"/>
+    <EditText
+        android:id="@+id/address_text"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:hint="Address"/>
 
-        <Button
-            android:id="@+id/submit_address_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Show me a map!"/>
+    <Button
+        android:id="@+id/submit_address_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:text="Show me a map!"/>
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/cur_loc"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:hint = "Your location"/>
 
 </LinearLayout>

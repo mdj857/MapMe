@@ -10,6 +10,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -25,6 +27,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private String address;
+    private float[] currentLatLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Intent intent = getIntent();
         address = intent.getStringExtra("address");
+        currentLatLng = intent.getFloatArrayExtra("currentLatLng");
+
     }
 
 
@@ -66,7 +71,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             e.printStackTrace();
         }
 
-        // display marker
+        // display current address
+
+        LatLng currLocation = new LatLng(currentLatLng[0], currentLatLng[1]);
+        MarkerOptions currMarker = new MarkerOptions().position(currLocation).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+
+        mMap.addMarker(currMarker);
+
+        // display marker for address
         LatLng latLng = new LatLng(result[0], result[1]);
         MarkerOptions marker = new MarkerOptions().position(latLng);
         CameraUpdate camera = CameraUpdateFactory.newLatLngZoom(latLng, 10);
