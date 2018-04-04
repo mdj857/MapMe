@@ -31,7 +31,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private String address;
     private static float[] currentLatLng;
-    private static Double[] addressLatitudeLongitude;
+    private static Double[] addressLatitudeLongitude = {(Double) 1.0, (Double) 2.0};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // get lat and long from google API
         String reqURL = "http://maps.google.com/maps/api/geocode/json?address=" + address + "&sensor=false";
-        Double[] result = null;
+        Object[] result = null;
         MyAsyncTask task = new MyAsyncTask();
         task.execute(reqURL);
         try {
@@ -78,18 +78,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // display current address
 
         LatLng currLocation = new LatLng(currentLatLng[0], currentLatLng[1]);
-        MarkerOptions currMarker = new MarkerOptions().position(currLocation).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+        MarkerOptions currMarker = new MarkerOptions().position(currLocation).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).title("Your location");
 
         mMap.addMarker(currMarker);
 
         // display marker for address
-        LatLng latLng = new LatLng(result[0], result[1]);
-        MarkerOptions marker = new MarkerOptions().position(latLng);
+        LatLng latLng = new LatLng((Double) result[0], (Double) result[1]);
+        MarkerOptions marker = new MarkerOptions().position(latLng).title((String) result[2]);
         CameraUpdate camera = CameraUpdateFactory.newLatLngZoom(latLng, 10);
         mMap.addMarker(marker);
         mMap.animateCamera(camera);
 
-        addressLatitudeLongitude = result;
+        addressLatitudeLongitude[0] = (Double) result[0];
+        addressLatitudeLongitude[1] = (Double) result[1];
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 

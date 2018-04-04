@@ -1,6 +1,5 @@
 package com.example.mapme_hw4;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import org.json.JSONArray;
@@ -18,11 +17,11 @@ import javax.net.ssl.HttpsURLConnection;
  * Created by mattjohnson on 3/27/18.
  */
 
-public class MyAsyncTask extends AsyncTask<String, Void, Double[]> {
+public class MyAsyncTask extends AsyncTask<String, Void, Object[]> {
 
     @Override
-    protected Double[] doInBackground(String... strings) {
-        Double[] lat_lng = new Double[2];
+    protected Object[] doInBackground(String... strings) {
+        Object[] result = new Object[3];
 
         String resp_JSON = new String();
         try {
@@ -44,15 +43,18 @@ public class MyAsyncTask extends AsyncTask<String, Void, Double[]> {
             double lat = ((JSONArray)jsonObject.get("results")).getJSONObject(0)
                     .getJSONObject("geometry").getJSONObject("location")
                     .getDouble("lat");
+            String streetName = ((JSONArray)jsonObject.get("results")).getJSONObject(0)
+                    .getString("formatted_address");
 
-            lat_lng[0] = lat;
-            lat_lng[1] = lng;
+            result[0] = (Object) lat;
+            result[1] = (Object) lng;
+            result[2] = (Object) streetName;
 
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
         }
-        return lat_lng;
+        return result;
     }
 
     public String getLatLongByURL(String requestURL) {
